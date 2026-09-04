@@ -1,0 +1,51 @@
+{
+  "groups": [
+    {
+      "name": "application",
+      "type": "java.lang.Object",
+      "description": "Custom application configuration properties."
+    },
+    {
+      "name": "application.security",
+      "type": "java.lang.Object",
+      "description": "Application security configurations."
+    },
+    {
+      "name": "application.security.jwt",
+      "type": "java.lang.Object",
+      "description": "JWT security configuration."
+    },
+    {
+      "name": "application.security.jwt.rsa",
+      "type": "java.lang.Object",
+      "description": "RSA key pair configuration for JWT signing and verification."
+    },
+    {
+      "name": "application.security.jwt.refresh-token",
+      "type": "java.lang.Object",
+      "description": "Refresh token configuration."
+    }
+  ],
+  "properties": [
+    {
+      "name": "application.security.jwt.rsa.private-key-location",
+      "type": "org.springframework.core.io.Resource",
+      "description": "Location of RSA private key file (PEM format)."
+    },
+    {
+      "name": "application.security.jwt.rsa.public-key-location",
+      "type": "org.springframework.core.io.Resource",
+      "description": "Location of RSA public key file (PEM format)."
+    },
+    {
+      "name": "application.security.jwt.expiration",
+      "type": "java.lang.Long",
+      "description": "JWT access token expiration time in milliseconds."
+    },
+    {
+      "name": "application.security.jwt.refresh-token.expiration",
+      "type": "java.lang.Long",
+      "description": "Refresh token expiration time in milliseconds."
+    }
+  ]
+}

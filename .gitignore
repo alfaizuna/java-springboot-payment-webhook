@@ -1,0 +1,54 @@
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Environment & Local Configs ###
+src/main/resources/application-dev.yaml
+src/main/resources/application-local.yaml
+.env
+*.env
+
+### Certificates & Keys ###
+src/main/resources/certs/private_key.pem
+*.pem
+*.key
+*.p12
+
+### macOS ###
+.DS_Store
+
+### Logs ###
+*.log
+logs/
+
+

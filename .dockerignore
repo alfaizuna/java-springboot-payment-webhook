@@ -1,0 +1,17 @@
+**/.git
+**/.gitignore
+**/.gitattributes
+target/
+.mvn/wrapper/maven-wrapper.jar
+**/.idea
+**/*.iml
+**/.vscode
+**/.DS_Store
+*.log
+logs/
+.env
+*.env
+MANUAL_TESTING.md
+Tasks.md
+PRD.md
+postman_collection.json

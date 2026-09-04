@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: baseapp
+  profiles:
+    active: dev
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+# Custom Application Config
+application:
+  security:
+    jwt:
+      rsa:
+        private-key-location: ${RSA_PRIVATE_KEY_LOCATION:classpath:certs/private_key.pem}
+        public-key-location: ${RSA_PUBLIC_KEY_LOCATION:classpath:certs/public_key.pem}
+      expiration: ${JWT_EXPIRATION:86400000} # 24 jam dalam milidetik
+      refresh-token:
+        expiration: ${REFRESH_TOKEN_EXPIRATION:604800000} # 7 hari dalam milidetik
