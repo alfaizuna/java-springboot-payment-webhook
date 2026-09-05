@@ -24,3 +24,6 @@ application:
       expiration: ${JWT_EXPIRATION:86400000} # 24 jam dalam milidetik
       refresh-token:
         expiration: ${REFRESH_TOKEN_EXPIRATION:604800000} # 7 hari dalam milidetik
+payment:
+  webhook:
+    secret-key: ${PAYMENT_WEBHOOK_SECRET:super-secret-webhook-key-change-in-prod}

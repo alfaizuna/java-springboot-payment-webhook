@@ -602,6 +602,201 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "3. Payment Webhook & Orders",
+			"item": [
+				{
+					"name": "Create Order",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderNumber\": \"ORD-POSTMAN-001\",\n    \"amount\": 150000.00\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/orders",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders"
+							]
+						},
+						"description": "Membuat pesanan baru dengan status awal PENDING."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/orders/ORD-POSTMAN-001/status",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"ORD-POSTMAN-001",
+								"status"
+							]
+						},
+						"description": "Mengecek status terkini dari pesanan."
+					},
+					"response": []
+				},
+				{
+					"name": "Simulate Webhook (Get Payload & Signature)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    var data = pm.response.json();",
+									"    pm.collectionVariables.set(\"webhookSignature\", data.valid_signature);",
+									"    pm.collectionVariables.set(\"webhookPayload\", data.raw_payload);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/orders/ORD-POSTMAN-001/simulate-webhook",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"orders",
+								"ORD-POSTMAN-001",
+								"simulate-webhook"
+							]
+						},
+						"description": "Simulator: Menghasilkan mock payload dan HMAC signature valid yang otomatis disimpan ke collection variables."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Valid Payment Webhook",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Signature",
+								"value": "{{webhookSignature}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{webhookPayload}}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/webhooks/payment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhooks",
+								"payment"
+							]
+						},
+						"description": "Mengirim callback webhook sah dengan signature HMAC valid. Status order berubah jadi PAID."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Duplicate Webhook (Test Idempotency)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Signature",
+								"value": "{{webhookSignature}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{webhookPayload}}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/webhooks/payment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhooks",
+								"payment"
+							]
+						},
+						"description": "Mengirim ulang webhook yang sama untuk memverifikasi proteksi Redis Idempotency ('Duplicate notification ignored')."
+					},
+					"response": []
+				},
+				{
+					"name": "Send Spoofed Webhook (Test 401 Unauthorized)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Signature",
+								"value": "fake_spoofed_signature_12345"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"transaction_id\": \"TRX-HACKER\",\n    \"order_number\": \"ORD-POSTMAN-001\",\n    \"gross_amount\": 150000.00,\n    \"payment_type\": \"qris\",\n    \"transaction_status\": \"settlement\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/v1/webhooks/payment",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"webhooks",
+								"payment"
+							]
+						},
+						"description": "Simulasi serangan hacker dengan signature palsu. Menghasilkan HTTP 401 Unauthorized."
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"variable": [
@@ -637,6 +832,16 @@
 		},
 		{
 			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "webhookSignature",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "webhookPayload",
 			"value": "",
 			"type": "string"
 		}
